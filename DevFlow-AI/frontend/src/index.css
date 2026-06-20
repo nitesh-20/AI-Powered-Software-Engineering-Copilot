@@ -1,0 +1,120 @@
+:root {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #e8ecf3;
+  background:
+    radial-gradient(circle at top, #1c3f5f 0%, transparent 35%),
+    linear-gradient(135deg, #07111f, #10243c 55%, #16304c);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.hero-card {
+  width: min(720px, 100%);
+  padding: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  background: rgba(9, 18, 31, 0.8);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(14px);
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #7dd3fc;
+  font-size: 0.75rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.subtitle {
+  margin: 16px 0 0;
+  color: #c6d4e1;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.repo-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.field-label {
+  font-size: 0.95rem;
+  color: #dbeafe;
+}
+
+.repo-input {
+  width: 100%;
+  padding: 16px 18px;
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  border-radius: 14px;
+  background: rgba(5, 12, 22, 0.7);
+  color: #f8fafc;
+  font-size: 1rem;
+}
+
+.repo-input::placeholder {
+  color: #7f93ab;
+}
+
+.submit-button {
+  width: fit-content;
+  padding: 14px 22px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  color: #03111f;
+  font-size: 0.98rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.status-panel {
+  margin-top: 28px;
+  padding: 24px;
+  border-radius: 18px;
+  background: rgba(125, 211, 252, 0.08);
+}
+
+.status-panel h2 {
+  margin-top: 0;
+}
+
+.status-success p,
+.status-error {
+  margin: 10px 0;
+}
+
+.status-error {
+  color: #fca5a5;
+}
