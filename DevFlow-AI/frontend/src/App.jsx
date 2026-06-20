@@ -11,21 +11,21 @@ const githubRepoPattern =
 function App() {
   const [inputUrl, setInputUrl] = useState("");
   const [repositoryUrl, setRepositoryUrl] = useState("");
-  const [submittedUrl, setSubmittedUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [repositoryData, setRepositoryData] = useState(null);
+  const [analysisData, setAnalysisData] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
-    setSuccessMessage("");
+    setRepositoryData(null);
+    setAnalysisData(null);
 
     const trimmedUrl = inputUrl.trim();
 
     if (!githubRepoPattern.test(trimmedUrl)) {
       setRepositoryUrl(trimmedUrl);
-      setSubmittedUrl("");
       setError("Enter a valid GitHub repository URL.");
       return;
     }
@@ -34,16 +34,15 @@ function App() {
     setLoading(true);
 
     try {
-      const { data } = await api.post("/repositories", {
-        repositoryUrl: trimmedUrl
+      const { data } = await api.post("/repositories/analyze", {
+        githubUrl: trimmedUrl
       });
 
-      setSubmittedUrl(data.repositoryUrl);
-      setSuccessMessage(data.message);
+      setRepositoryData(data.repository || null);
+      setAnalysisData(data.aiAnalysis || null);
     } catch (err) {
-      setSubmittedUrl("");
       setError(
-        err.response?.data?.message || "Unable to submit repository URL."
+        err.response?.data?.message || "Unable to analyze repository."
       );
     } finally {
       setLoading(false);
@@ -56,7 +55,8 @@ function App() {
         <p className="eyebrow">Repository Intake</p>
         <h1>DevFlow AI</h1>
         <p className="subtitle">
-          Paste a GitHub repository URL and send it to the backend API.
+          Paste a GitHub repository URL to fetch GitHub metadata and generate a
+          Gemini-powered project analysis.
         </p>
 
         <form className="repo-form" onSubmit={handleSubmit}>
@@ -73,26 +73,69 @@ function App() {
             onChange={(event) => setInputUrl(event.target.value)}
           />
           <button className="submit-button" type="submit" disabled={loading}>
-            {loading ? "Submitting..." : "Submit Repository"}
+            {loading ? "Analyzing..." : "Analyze Repository"}
           </button>
         </form>
 
         <div className="status-panel">
-          <h2>Submission Status</h2>
+          <h2>Analysis Status</h2>
           {repositoryUrl && (
             <p>
               <strong>URL in state:</strong> {repositoryUrl}
             </p>
           )}
           {error && <p className="status-error">{error}</p>}
-          {successMessage && (
-            <div className="status-success">
+          {repositoryData && (
+            <div className="status-success result-grid">
               <p>
-                <strong>Message:</strong> {successMessage}
+                <strong>Name:</strong> {repositoryData.name}
               </p>
               <p>
-                <strong>Submitted URL:</strong> {submittedUrl}
+                <strong>Description:</strong>{" "}
+                {repositoryData.description || "No description available"}
               </p>
+              <p>
+                <strong>Language:</strong> {repositoryData.language || "Unknown"}
+              </p>
+              <p>
+                <strong>Stars:</strong> {repositoryData.stars}
+              </p>
+              <p>
+                <strong>Forks:</strong> {repositoryData.forks}
+              </p>
+            </div>
+          )}
+          {analysisData && (
+            <div className="analysis-card">
+              <h3>Gemini Analysis</h3>
+              {"error" in analysisData ? (
+                <p className="status-error">{analysisData.error}</p>
+              ) : (
+                <>
+                  <p>
+                    <strong>Project Summary:</strong>{" "}
+                    {analysisData.projectSummary}
+                  </p>
+                  <div>
+                    <strong>Technology Stack:</strong>
+                    <div className="chip-row">
+                      {analysisData.technologyStack?.length ? (
+                        analysisData.technologyStack.map((item) => (
+                          <span className="chip" key={item}>
+                            {item}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="chip">Not identified</span>
+                      )}
+                    </div>
+                  </div>
+                  <p>
+                    <strong>Architecture:</strong>{" "}
+                    {analysisData.architectureExplanation}
+                  </p>
+                </>
+              )}
             </div>
           )}
         </div>

@@ -110,6 +110,41 @@ h1 {
   margin-top: 0;
 }
 
+.result-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.analysis-card {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(4, 10, 18, 0.55);
+  border: 1px solid rgba(125, 211, 252, 0.14);
+}
+
+.analysis-card h3 {
+  margin-top: 0;
+  margin-bottom: 14px;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.14);
+  color: #d8f3ff;
+  font-size: 0.9rem;
+}
+
 .status-success p,
 .status-error {
   margin: 10px 0;
